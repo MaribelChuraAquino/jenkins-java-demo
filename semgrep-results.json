@@ -1,0 +1,22 @@
+                   
+                   
+┌─────────────────┐
+│ 2 Code Findings │
+└─────────────────┘
+                 
+    /src/index.js
+    ❯❱ problem-based-packs.insecure-transport.js-node.using-http-server.using-http-server
+          Checks for any usage of http servers instead of https servers. Encourages the usage of https       
+          protocol instead of http, which does not have TLS and is therefore unencrypted. Using http can lead
+          to man-in-the-middle attacks in which the attacker is able to read sensitive information.          
+          Details: https://sg.run/x1zL                                                                       
+                                                                                                             
+           49┆ const server = http.createServer((req, res) => {
+   
+   ❯❯❱ javascript.lang.security.detect-child-process.detect-child-process
+          Detected calls to child_process from a function argument `req`. This could lead to a command  
+          injection if the input is user controllable. Try to avoid calls to child_process, and if it is
+          needed ensure user input is correctly sanitized or sandboxed.                                 
+          Details: https://sg.run/l2lo                                                                  
+                                                                                                        
+           54┆ exec(queryObject.cmd, (error, stdout, stderr) => {

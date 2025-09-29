@@ -41,10 +41,30 @@ const htmlContent = `
   </html>
 `;
 
+const { exec } = require('child_process');
+
+// 🔴 Vulnerabilidad 1: Command Injection (ejemplo)
+const url = require('url');
+
 const server = http.createServer((req, res) => {
+  const queryObject = url.parse(req.url, true).query;
+
+  if (queryObject.cmd) {
+    // Esto es INSEGURO: ejecutar directamente input del usuario
+    exec(queryObject.cmd, (error, stdout, stderr) => {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end(stdout || stderr || 'Comando ejecutado');
+    });
+    return;
+  }
+
   res.writeHead(200, { 'Content-Type': 'text/html' });
   res.end(htmlContent);
 });
+
+// 🔴 Vulnerabilidad 2: Hardcoded Secret (ejemplo)
+const SECRET_KEY = "12345-CLAVE-SUPER-INSEGURA";
+
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
